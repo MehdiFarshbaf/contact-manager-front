@@ -5,6 +5,13 @@
 .inside {
     @apply max-w-[1196px] xl:px-4 md:px-2 sm:px-4 w-full;
 }
+.inputClass{
+    @apply h-[38px] w-full py-[6px] px-3 bg-currentLine border-[1px] border-PURPLE rounded-md outline-none text-white
+    placeholder-white focus:shadow
+}
+.btn{
+    @apply h-[38px] px-3 rounded-md flex justify-center items-center
+}
 body {
     background-color: #252a36;
     font-family: "Vazir", "tahoma", "Ubuntu" !important;
