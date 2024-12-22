@@ -1,30 +1,34 @@
 import * as Yup from "yup"
 import {useEffect, useState} from "react";
-import {useForm} from 'react-hook-form'
+import {Controller, useForm} from 'react-hook-form'
 import {yupResolver} from "@hookform/resolvers/yup";
 import {Link} from "react-router-dom";
 import TextInput from "../inputs/TextInput";
 import {useGetCategoriesQuery} from "../../data/services/Category";
+import {OptionSelect} from "../../interface/publicInterface";
+import Select, {SingleValue} from "react-select";
 
 interface FormInputs {
     firstName: string,
     lastName: string,
     mobile: string,
     email: string,
-    job: string
+    job: string,
+    category_id: string
 }
 
 const AddContacts = () => {
 
     const {data, isLoading} = useGetCategoriesQuery()
 
-    const [categoryList, setCategoryList] = useState([])
+    const [categoryList, setCategoryList] = useState<OptionSelect[]>([])
 
     const schema = Yup.object().shape({
         firstName: Yup.string().required(("نام الزامی است.")).min(3),
         lastName: Yup.string().required(("نام خانوادگی الزامی است.")),
         mobile: Yup.string().required(("موبایل الزامی است.")),
         job: Yup.string().required(("شغل الزامی است.")),
+        category_id: Yup.string().required(("انتخاب دسته بندی الزامی است.")),
         email: Yup.string().email("ایمیل وارد شده معتبر نمی باشد.").required(("ایمیل الزامی است.")),
     });
     const {handleSubmit, control, formState: {errors}, getValues, setValue, reset} = useForm<FormInputs>({
@@ -34,10 +38,17 @@ const AddContacts = () => {
     const onSubmit = (data: FormInputs) => console.log(data)
 
     useEffect(() => {
-        if(data?.success == true){
-            console.log("categories is  ",data.data)
+        if (data?.success == true) {
+            const newList = data.data.map(item => {
+                return {
+                    label: item.name,
+                    value: item._id
+                }
+            })
+            setCategoryList(newList)
         }
     }, [data]);
+
 
     return (
         <main className="w-full flex justify-center items-center flex-col">
@@ -55,6 +66,27 @@ const AddContacts = () => {
                         <TextInput name="mobile" control={control} errors={errors} placeholder="موبایل"/>
                         <TextInput name="email" control={control} errors={errors} type="email" placeholder="ایمیل"/>
                         <TextInput name="job" control={control} errors={errors} placeholder="شغل"/>
+                        <Controller render={({field: {value, onChange}}) => (
+                            <Select options={categoryList} classNamePrefix="select"
+                                    components={{
+                                        IndicatorSeparator: null
+                                    }}
+                                    onChange={(value: SingleValue<OptionSelect>) => onChange(value?.value)}
+                                    value={categoryList.find(ele => ele.value === value)}
+                                    placeholder="انتخاب دسته بندی"
+                                    classNames={{
+                                        control: ({isFocused}) => isFocused ? '!h-[38px] !w-full !text-white !bg-currentLine !border-[1px] !border-PURPLE !rounded-md outline-none text-white' : '!h-[38px] !w-full !bg-currentLine !text-white !border-[1px] !border-PURPLE !rounded-md outline-none text-white',
+                                        placeholder: () => "!text-white",
+                                        // input: () => "!text-white",
+                                        // valueContainer: () => "!text-white",
+                                        singleValue: () => "!text-white",
+                                        indicatorsContainer: () => "!text-white"
+                                    }}
+                                    isLoading={isLoading}
+                            />
+                        )} name="category_id" control={control}/>
+                        {errors.category_id && <p className={`text-red-700 `}>{errors.category_id?.message}</p>}
+
 
                         <div className="w-full flex justify-center items-center gap-2">
                             <button type="submit" className="btn bg-PURPLE">ساخت مخاطب</button>
