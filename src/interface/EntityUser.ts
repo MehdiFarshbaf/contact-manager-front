@@ -19,3 +19,6 @@ export interface IUserType extends ID,IUser{}
 export interface IUserListApi extends IResponseApi{
     data:IUserType[]
 }
+export interface ResultAddUser extends IResponseApi{
+    data:IUserType
+}

@@ -1,7 +1,6 @@
 import {useGetUsersQuery} from "../../data/services/User";
 import {useEffect, useState} from "react";
 import {IUserType} from "../../interface/EntityUser";
-import {toast} from "react-toastify";
 import {Link} from "react-router-dom";
 import {FaCirclePlus} from "react-icons/fa6";
 
@@ -12,7 +11,6 @@ const Contacts = () => {
 
     useEffect(() => {
         if (data?.success == true) {
-            toast.success(data.message)
             setUsers(data.data)
         }
     }, [data]);

@@ -10,7 +10,7 @@ const MainLayout: FC<IProps> = ({children}) => {
         <>
             <Header/>
             {children}
-            <footer>footer</footer>
+            {/* <footer>footer</footer> */}
         </>
     )
 }

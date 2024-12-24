@@ -1,28 +1,36 @@
 import * as Yup from "yup"
-import { useEffect, useState } from "react";
+import { FormEvent, useEffect, useState } from "react";
 import { Controller, useForm } from 'react-hook-form'
 import { yupResolver } from "@hookform/resolvers/yup";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import TextInput from "../inputs/TextInput";
 import { useGetCategoriesQuery } from "../../data/services/Category";
 import { OptionSelect } from "../../interface/publicInterface";
 import Select, { SingleValue } from "react-select";
 import SelectInput from "../inputs/SelectInput";
+import { useAddUserMutation } from "../../data/services/User";
+import { toast } from "react-toastify";
 
-interface FormInputs {
-    firstName: string,
-    lastName: string,
-    mobile: string,
-    email: string,
-    job: string,
-    category_id: string
-}
+// interface FormInputs {
+//     firstName: string,
+//     lastName: string,
+//     mobile: string,
+//     email: string,
+//     job: string,
+//     category_id: string,
+//     image: File
+// }
 
 const AddContacts = () => {
 
     const { data, isLoading } = useGetCategoriesQuery()
-
+    const [file, setFile] = useState(null)
+    const [preview, setPreview] = useState<any>(null)
     const [categoryList, setCategoryList] = useState<OptionSelect[]>([])
+
+    const [addUser, resultAddUser] = useAddUserMutation()
+    const navigate = useNavigate()
+
 
     const schema = Yup.object().shape({
         firstName: Yup.string().required(("نام الزامی است.")).min(3),
@@ -31,12 +39,31 @@ const AddContacts = () => {
         job: Yup.string().required(("شغل الزامی است.")),
         category_id: Yup.string().required(("انتخاب دسته بندی الزامی است.")),
         email: Yup.string().email("ایمیل وارد شده معتبر نمی باشد.").required(("ایمیل الزامی است.")),
-    });
-    const { handleSubmit, control, formState: { errors }, getValues, setValue, reset } = useForm<FormInputs>({
+        image:Yup.mixed<File>()
+          .test("required", "You need to provide a file", (file) => {
+            // return file && file.size <-- u can use this if you don't want to allow empty files to be uploaded;
+            if (file) return true;
+            return false;
+          })
+          .test("fileSize", "The file is too large", (file) => {
+            //if u want to allow only certain file sizes
+            return file && file.size <= 2000000;
+          })
+      });
+    const { handleSubmit, control, formState: { errors }, getValues, setValue, reset } = useForm<any>({
         resolver: yupResolver(schema),
         defaultValues: {}
     })
-    const onSubmit = (data: FormInputs) => console.log(data)
+    const loadImage = (e: any) => {
+        const image = e.target.files[0]
+        setFile(image)
+        setValue("image", file)
+        setPreview(URL.createObjectURL(image))
+    }
+    const onSubmit = (data: any) => {
+        const newUser = { ...data, image: file }
+        addUser(newUser)
+    }
 
     useEffect(() => {
         if (data?.success == true) {
@@ -50,6 +77,12 @@ const AddContacts = () => {
         }
     }, [data]);
 
+    useEffect(() => {
+        if (resultAddUser.data?.success == true) {
+            toast.success(resultAddUser.data.message)
+            navigate("/contacts")
+        }
+    }, [resultAddUser])
 
     return (
         <main className="w-full flex justify-center items-center flex-col">
@@ -58,7 +91,6 @@ const AddContacts = () => {
             </section>
             <img src={require("../../assets/images/man-taking-note.png")}
                 className="h-[400px] absolute z-[-1] top-[130px] left-[100px] opacity-50" alt="" />
-            <p className="text-primary opacity-100">hellooo</p>
             <section className="mt-5 w-full inside">
                 <div className="w-1/3 ">
                     <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-3">
@@ -68,28 +100,28 @@ const AddContacts = () => {
                         <TextInput name="email" control={control} errors={errors} type="email" placeholder="ایمیل" />
                         <TextInput name="job" control={control} errors={errors} placeholder="شغل" />
                         <SelectInput list={categoryList} name="category_id" control={control} errors={errors} isLoading={isLoading} placeholder="انتخاب دسته بندی" />
-                        {/* <Controller render={({ field: { value, onChange } }) => (
-                            <Select options={categoryList} classNamePrefix="select"
-                                components={{
-                                    IndicatorSeparator: null
-                                }}
-                                onChange={(value: SingleValue<OptionSelect>) => onChange(value?.value)}
-                                value={categoryList.find(ele => ele.value === value)}
-                                placeholder="انتخاب دسته بندی"
-                                classNames={{
-                                    control: ({ isFocused }) => isFocused ? '!h-[38px] !w-full !text-white !bg-currentLine !border-[1px] !border-PURPLE !rounded-md outline-none text-white' : '!h-[38px] !w-full !bg-currentLine !text-white !border-[1px] !border-PURPLE !rounded-md outline-none text-white',
-                                    placeholder: () => "!text-white",
-                                    // input: () => "!text-white",
-                                    // valueContainer: () => "!text-white",
-                                    singleValue: () => "!text-white",
-                                    indicatorsContainer: () => "!text-white"
-                                }}
-                                isLoading={isLoading}
+                        {preview ?
+                            <img className="mt-5 has-shadow image" src={preview} width="250" alt="" /> : null
+                            // <img className="mt-5 has-shadow image" src={currentData?.url} width="250"
+                            //      alt=""/>
+                        }
+                        <div className="w-full flex justify-center items-center bg-comment rounded-md cursor-pointer">
+                            <Controller
+                                render={({ field: { onChange, onBlur, value, name, ref } }) => (
+                                    <label id='upload' className='btn flex text-PURPLE'>بارگذاری عکس
+                                        <input id='upload' hidden type='file' accept="image/png, image/jpeg"
+                                            onChange={(e: FormEvent<HTMLInputElement>) => loadImage(e)} />
+                                    </label>
+                                )}
+                                name="image"
+                                control={control}
                             />
-                        )} name="category_id" control={control} />
-                        {errors.category_id && <p className={`text-red-700 `}>{errors.category_id?.message}</p>} */}
-
-
+                            {/* <label id='upload' className='btn flex text-PURPLE'>بارگذاری عکس
+                                <input id='upload' hidden type='file' accept="image/png, image/jpeg"
+                                    onChange={(e: FormEvent<HTMLInputElement>) => loadImage(e)} />
+                            </label> */}
+                        </div>
+                        {errors.image && <p className={`text-red-700 `}>{errors.image.message}</p>}
                         <div className="w-full flex justify-center items-center gap-2">
                             <button type="submit" className="btn bg-PURPLE">ساخت مخاطب</button>
                             <Link className="btn bg-comment" to="/contacts">انصراف</Link>
