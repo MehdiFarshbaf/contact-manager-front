@@ -1,4 +1,4 @@
-import {Control, Controller} from "react-hook-form";
+import { Controller} from "react-hook-form";
 import {FC, HTMLProps} from "react";
 import {FormComponentProps} from "../../interface/publicInterface";
 

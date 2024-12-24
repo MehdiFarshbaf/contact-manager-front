@@ -17,6 +17,7 @@ module.exports = {
         RED : "#ff5555",
         YELLOW : "#f1fa8c",
         currentLine: "#44475a",
+        primary: "var(--primary)",
       },
     },
     screens: {
