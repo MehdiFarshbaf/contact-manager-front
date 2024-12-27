@@ -1,6 +1,6 @@
 import { useGetUsersQuery } from "../../data/services/User";
 import { useEffect, useState } from "react";
-import { IUserType } from "../../interface/EntityUser";
+import { UserType } from "../../interface/EntityUser";
 import { Link } from "react-router-dom";
 import { FaCirclePlus } from "react-icons/fa6";
 import Contact from "./Contact";
@@ -8,7 +8,7 @@ import Contact from "./Contact";
 const Contacts = () => {
 
     const { data, isLoading } = useGetUsersQuery()
-    const [users, setUsers] = useState<IUserType[]>()
+    const [users, setUsers] = useState<UserType[]>()
 
     useEffect(() => {
         if (data?.success == true) {

@@ -1,6 +1,6 @@
 import {HTMLProps} from "react";
 
-export interface IResponseApi {
+export interface ResponseApi {
     success: boolean,
     message: string
 }
