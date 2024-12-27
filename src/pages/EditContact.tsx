@@ -1,35 +1,30 @@
-import * as Yup from "yup"
+import {Link, useNavigate, useParams} from "react-router-dom";
 import {FormEvent, useEffect, useState} from "react";
-import {Controller, useForm} from 'react-hook-form'
+import {useEditUserMutation, useGetUserQuery} from "../data/services/User";
+import {UserTypeWithCategory} from "../interface/EntityUser";
+import * as Yup from "yup";
+import {Controller, useForm} from "react-hook-form";
 import {yupResolver} from "@hookform/resolvers/yup";
-import {Link, useNavigate} from "react-router-dom";
-import TextInput from "../inputs/TextInput";
-import {useGetCategoriesQuery} from "../../data/services/Category";
-import {OptionSelect} from "../../interface/publicInterface";
-import SelectInput from "../inputs/SelectInput";
-import {useAddUserMutation} from "../../data/services/User";
+import {useGetCategoriesQuery} from "../data/services/Category";
+import {OptionSelect} from "../interface/publicInterface";
+import TextInput from "../components/inputs/TextInput";
+import SelectInput from "../components/inputs/SelectInput";
 import {toast} from "react-toastify";
 
-// interface FormInputs {
-//     firstName: string,
-//     lastName: string,
-//     mobile: string,
-//     email: string,
-//     job: string,
-//     category_id: string,
-//     image: File
-// }
+const EditContact = () => {
 
-const AddContacts = () => {
-
-    const {data, isLoading} = useGetCategoriesQuery()
+    const {contactId} = useParams()
+    const {
+        data,
+        isLoading
+    } = useGetUserQuery({_id: contactId ?? ""}, {skip: contactId == null || contactId == "" || contactId == undefined})
+    const {data: dataCategory, isLoading: isLoadingCategory} = useGetCategoriesQuery()
     const [file, setFile] = useState(null)
     const [preview, setPreview] = useState<any>(null)
+    const [user, setUser] = useState<UserTypeWithCategory | undefined>()
     const [categoryList, setCategoryList] = useState<OptionSelect[]>([])
-
-    const [addUser, resultAddUser] = useAddUserMutation()
+    const [editUser, resultEditUser] = useEditUserMutation()
     const navigate = useNavigate()
-
 
     const schema = Yup.object().shape({
         firstName: Yup.string().required(("نام الزامی است.")).min(3),
@@ -38,16 +33,6 @@ const AddContacts = () => {
         job: Yup.string().required(("شغل الزامی است.")),
         category_id: Yup.string().required(("انتخاب دسته بندی الزامی است.")),
         email: Yup.string().email("ایمیل وارد شده معتبر نمی باشد.").required(("ایمیل الزامی است.")),
-        // image: Yup.mixed<File>()
-        //     .test("required", "You need to provide a file", (file) => {
-        //         // return file && file.size <-- u can use this if you don't want to allow empty files to be uploaded;
-        //         if (file) return true;
-        //         return false;
-        //     })
-        //     .test("fileSize", "The file is too large", (file) => {
-        //         //if u want to allow only certain file sizes
-        //         return file && file.size <= 2000000;
-        //     })
     });
     const {handleSubmit, control, formState: {errors}, getValues, setValue, reset} = useForm<any>({
         resolver: yupResolver(schema),
@@ -59,14 +44,27 @@ const AddContacts = () => {
         setValue("image", file)
         setPreview(URL.createObjectURL(image))
     }
-    const onSubmit = (data: any) => {
-        const newUser = {...data, image: file}
-        addUser(newUser)
+    const onSubmit = (newUser: any) => {
+        console.log(data)
+        // const newUser = {...data, image: file}
+        editUser(newUser)
     }
-
     useEffect(() => {
-        if (data?.success == true) {
-            const newList = data.data.map(item => {
+        if (data?.success === true) {
+            reset({
+                _id: data.data._id,
+                firstName: data.data.firstName,
+                lastName: data.data.lastName,
+                mobile: data.data.mobile,
+                job: data.data.job,
+                category_id: data.data.category_id,
+                email: data.data.email,
+            })
+        }
+    }, [data]);
+    useEffect(() => {
+        if (dataCategory?.success == true) {
+            const newList = dataCategory.data.map(item => {
                 return {
                     label: item.name,
                     value: item._id
@@ -74,32 +72,32 @@ const AddContacts = () => {
             })
             setCategoryList(newList)
         }
-    }, [data]);
+    }, [dataCategory]);
 
     useEffect(() => {
-        if (resultAddUser.data?.success == true) {
-            toast.success(resultAddUser.data.message)
+        if (resultEditUser?.data?.success === true) {
+            toast.success(resultEditUser.data.message)
             navigate("/contacts")
         }
-    }, [resultAddUser])
+    }, [resultEditUser])
 
     return (
-        <main className="w-full flex justify-center items-center flex-col">
-            <section className="w-full inside">
-                <h2 className="font-normal text-center text-GREEN border-b-[1px] border-GREEN py-4">ساخت مخاطب جدید</h2>
+        <main className="w-full flex flex-col justify-center items-center">
+            <section className="inside w-full mt-2 my-2 text-center p-3">
+                <h3 className="text-CYAN font-bold">ویرایش مخاطب</h3>
             </section>
-            <img src={require("../../assets/images/man-taking-note.png")}
-                 className="h-[400px] absolute z-[-1] top-[130px] left-[100px] opacity-50" alt=""/>
-            <section className="mt-5 w-full inside">
-                <div className="w-1/3 ">
-                    <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-3">
+            <hr className="bg-CYAN w-full"/>
+            {!isLoading && <section className="inside w-full mt-2 my-2 text-center p-3 bg-currentLine rounded-md">
+                <form onSubmit={handleSubmit(onSubmit)} className="w-full grid grid-cols-[9fr,3fr] gap-4">
+
+                    <div className=" flex flex-col justify-center gap-2">
                         <TextInput name="firstName" control={control} errors={errors} placeholder="نام"/>
                         <TextInput name="lastName" control={control} errors={errors} placeholder="نام خانوادگی"/>
                         <TextInput name="mobile" control={control} errors={errors} placeholder="موبایل"/>
                         <TextInput name="email" control={control} errors={errors} type="email" placeholder="ایمیل"/>
                         <TextInput name="job" control={control} errors={errors} placeholder="شغل"/>
                         <SelectInput list={categoryList} name="category_id" control={control} errors={errors}
-                                     isLoading={isLoading} placeholder="انتخاب دسته بندی"/>
+                                     isLoading={isLoadingCategory} placeholder="انتخاب دسته بندی"/>
                         {preview ?
                             <img className="mt-5 has-shadow image" src={preview} width="250" alt=""/> : null
                             // <img className="mt-5 has-shadow image" src={currentData?.url} width="250"
@@ -118,16 +116,20 @@ const AddContacts = () => {
                             />
 
                         </div>
-                        {/* {errors.image && <p className={`text-red-700 `}>{errors.image.message}</p>} */}
-                        <div className="w-full flex justify-center items-center gap-2">
-                            <button type="submit" className="btn bg-PURPLE">ساخت مخاطب</button>
-                            <Link className="btn bg-comment" to="/contacts">انصراف</Link>
-                        </div>
-                    </form>
+                    </div>
+                    <div className="">
+                        <img src={data?.data?.image_path} alt={user?.firstName}
+                             className="border-[1px] border-PURPLE rounded-md h-full"/>
+                    </div>
+
+                </form>
+                <div className="w-full flex justify-center items-center gap-2 mt-4">
+                    <button onClick={() => onSubmit(getValues())} className="btn bg-PURPLE">ویرایش مخاطب</button>
+                    <Link className="btn bg-comment" to="/contacts">انصراف</Link>
                 </div>
 
-            </section>
+            </section>}
         </main>
     )
 }
-export default AddContacts
+export default EditContact

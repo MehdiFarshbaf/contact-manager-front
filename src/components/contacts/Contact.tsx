@@ -19,7 +19,6 @@ interface IProps {
 const Contact: FC<IProps> = ({user}) => {
 
 
-    console.log("user is : ", user)
     const [deleteUser, resultDeleteUser] = useDeleteUserMutation()
 
     const handleDeleteUser = async () => {
@@ -77,8 +76,8 @@ const Contact: FC<IProps> = ({user}) => {
             <div className="flex flex-col justify-evenly items-center">
                 <Link to={`/contacts/${user._id}`}
                       className="h-10 w-10 rounded-md flex justify-center items-center cursor-pointer bg-ORANGE"><FaEye/></Link>
-                <div className="h-10 w-10 rounded-md flex justify-center items-center cursor-pointer bg-CYAN"><FaPen/>
-                </div>
+                <Link to={`/contacts/edit/${user._id}`} className="h-10 w-10 rounded-md flex justify-center items-center cursor-pointer bg-CYAN"><FaPen/>
+                </Link>
                 <div className="h-10 w-10 rounded-md flex justify-center items-center cursor-pointer bg-RED"
                      onClick={() => handleDeleteUser()}><FaTrash/></div>
 

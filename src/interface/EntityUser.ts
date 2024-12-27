@@ -32,3 +32,5 @@ export interface ResultGetUser extends ResponseApi{
 }
 export interface ResultDeleteUser extends ResponseApi{
 }
+export interface ResultEditUser extends ResponseApi{
+}

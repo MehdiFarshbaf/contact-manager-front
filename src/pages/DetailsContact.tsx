@@ -1,9 +1,9 @@
 import {Link, useParams} from "react-router-dom";
 import {useEffect, useState} from "react";
 import {useGetUserQuery} from "../data/services/User";
-import {UserType, UserTypeWithCategory} from "../interface/EntityUser";
+import { UserTypeWithCategory} from "../interface/EntityUser";
 
-const ContactDetails = () => {
+const DetailsContact = () => {
 
     const {contactId} = useParams()
     const {
@@ -58,4 +58,4 @@ const ContactDetails = () => {
         </main>
     )
 }
-export default ContactDetails
+export default DetailsContact
