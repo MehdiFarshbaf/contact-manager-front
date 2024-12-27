@@ -30,3 +30,5 @@ export interface ResultAddUser extends ResponseApi{
 export interface ResultGetUser extends ResponseApi{
     data:UserTypeWithCategory
 }
+export interface ResultDeleteUser extends ResponseApi{
+}

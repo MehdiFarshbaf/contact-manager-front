@@ -1,7 +1,7 @@
 import {createApi} from '@reduxjs/toolkit/query/react'
 import {baseQueryWithReAuth} from '../../config/serviceConfig'
 import {USER_PATH} from '../../config/ApiConfig'
-import {IUserListApi, ResultAddUser, ResultGetUser} from '../../interface/EntityUser'
+import {IUserListApi, ResultAddUser, ResultDeleteUser, ResultGetUser} from '../../interface/EntityUser'
 import {changeToFormData} from '../../utils/functions'
 import {ID} from "../../interface/publicInterface";
 
@@ -32,7 +32,7 @@ export const UserApi = createApi({
                 body: changeToFormData(body)
             }),
             invalidatesTags: ['User']
-        })
+        }),
         // BlogEdit: builder.mutation<void, BlogUpdatePropsApi>({
         //     query: ({ id, ...res }) => ({
         //         url: BLOG_PATH + "/" + id,
@@ -43,14 +43,13 @@ export const UserApi = createApi({
         //     invalidatesTags: ['Blog'],
         // }),
         //
-        // BlogRemove: builder.mutation<void, BlogRemovePropsApi>({
-        //     query: (body) => ({
-        //         url: BLOG_PATH + "/" + body.id,
-        //         method: 'DELETE',
-        //
-        //     }),
-        //     invalidatesTags: ['Blog'],
-        // }),
+        deleteUser: builder.mutation<ResultDeleteUser, ID>({
+            query: (body) => ({
+                url: USER_PATH + "/" + body._id,
+                method: 'DELETE',
+            }),
+            invalidatesTags: ['User'],
+        }),
     })
 })
-export const {useGetUsersQuery, useAddUserMutation, useGetUserQuery} = UserApi
+export const {useGetUsersQuery, useAddUserMutation, useGetUserQuery,useDeleteUserMutation} = UserApi
