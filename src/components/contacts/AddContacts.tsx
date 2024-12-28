@@ -121,7 +121,7 @@ const AddContacts = () => {
                                     onChange={(e: FormEvent<HTMLInputElement>) => loadImage(e)} />
                             </label> */}
                         </div>
-                        {errors.image && <p className={`text-red-700 `}>{errors.image.message}</p>}
+                        {errors.image && <p className={`text-red-700 `}>{errors?.image?.message}</p>}
                         <div className="w-full flex justify-center items-center gap-2">
                             <button type="submit" className="btn bg-PURPLE">ساخت مخاطب</button>
                             <Link className="btn bg-comment" to="/contacts">انصراف</Link>
