@@ -1,15 +1,15 @@
-import {IResponseApi, ID} from "./publicInterface";
+import {ResponseApi, ID} from "./publicInterface";
 
 
-export interface ICategory {
+export interface Category {
     name: string,
     createdAt: string,
     updatedAt: string,
 }
 
-export interface ICategoryType extends ID, ICategory {
+export interface CategoryType extends ID, Category {
 }
 
-export interface CategoryListApi extends IResponseApi {
-    data: ICategoryType[]
+export interface CategoryListApi extends ResponseApi {
+    data: CategoryType[]
 }

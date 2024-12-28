@@ -1,7 +1,8 @@
-import {IResponseApi,ID} from "./publicInterface";
+import {ResponseApi,ID} from "./publicInterface";
+import {CategoryType} from "./EntityCategory";
 
 
-export interface IUser{
+export interface User{
     category_id:string,
     createdAt:string,
     email:string,
@@ -15,10 +16,21 @@ export interface IUser{
     mobile:string,
     updatedAt:string,
 }
-export interface IUserType extends ID,IUser{}
-export interface IUserListApi extends IResponseApi{
-    data:IUserType[]
+export interface UserType extends ID,User{}
+export interface UserTypeWithCategory extends ID,UserType{
+    category:CategoryType
 }
-export interface ResultAddUser extends IResponseApi{
-    data:IUserType
+export interface IUserListApi extends ResponseApi{
+    data:UserType[]
+}
+export interface ResultAddUser extends ResponseApi{
+    data:UserType
+}
+
+export interface ResultGetUser extends ResponseApi{
+    data:UserTypeWithCategory
+}
+export interface ResultDeleteUser extends ResponseApi{
+}
+export interface ResultEditUser extends ResponseApi{
 }
