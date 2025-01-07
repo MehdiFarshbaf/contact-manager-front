@@ -1,6 +1,6 @@
 import { Controller} from "react-hook-form";
-import {FC, HTMLProps} from "react";
-import {FormComponentProps} from "../../interface/publicInterface";
+import {FC} from "react";
+import {ClassName, FormComponentProps} from "../../interface/publicInterface";
 
 
 interface IProps extends FormComponentProps {
@@ -9,9 +9,9 @@ interface IProps extends FormComponentProps {
     placeholder?: string,
     type?: "text"|"email",
     classNames?: {
-        classContainer?: HTMLProps<HTMLElement>["className"],
-        classInput?: HTMLProps<HTMLElement>["className"],
-        classError?: HTMLProps<HTMLElement>["className"],
+        classContainer?: ClassName,
+        classInput?: ClassName,
+        classError?: ClassName,
     }
 }
 

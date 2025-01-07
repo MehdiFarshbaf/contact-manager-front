@@ -1,5 +1,6 @@
 import {HTMLProps} from "react";
 
+export type ClassName = HTMLProps<HTMLElement>["className"]
 export interface ResponseApi {
     success: boolean,
     message: string
@@ -16,7 +17,7 @@ export interface IFormComponentProps {
     getValues?: any
 }
 
-export interface ClassName {
+export interface IClassName {
     className: HTMLProps<HTMLElement>["className"]
 }
 

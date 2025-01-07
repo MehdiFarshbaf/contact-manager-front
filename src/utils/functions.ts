@@ -16,5 +16,4 @@ export const handleShowError = (data: any) => {
   } else {
     toast.error(data.message)
   }
-  
 }

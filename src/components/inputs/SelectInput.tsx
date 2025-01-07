@@ -1,5 +1,5 @@
-import { FC, HTMLProps } from "react"
-import { FormComponentProps, OptionSelect } from "../../interface/publicInterface"
+import { FC } from "react"
+import {ClassName, FormComponentProps, OptionSelect} from "../../interface/publicInterface"
 import { Controller } from "react-hook-form";
 import Select, { SingleValue } from "react-select";
 
@@ -10,9 +10,9 @@ interface IProps extends FormComponentProps {
     isLoading?: boolean,
     list: OptionSelect[],
     classNames?: {
-        classContainer?: HTMLProps<HTMLElement>["className"],
-        classInput?: HTMLProps<HTMLElement>["className"],
-        classError?: HTMLProps<HTMLElement>["className"],
+        classContainer?: ClassName,
+        classInput?: ClassName,
+        classError?: ClassName,
     }
 }
 
