@@ -32,12 +32,12 @@ const ImageUploader: FC<IProps> = ({classNames, name, control, errors, srcImage,
         <div
             className={`w-full flex flex-col items-center justify-center rounded-xl ${classNames?.classContainer}`}>
             <div className="relative rounded-xl p-3 w-full min-h-[180px] border-dashed border-blue-500 border-[1px] flex justify-evenly items-center flex-col">
-                {preview ? <img src={preview} alt="" className="w-[150px] h-[150px]" /> :
-                   srcImage ? <img src={srcImage} alt="" className="w-[150px] h-[150px]" /> : <MdOutlineCloudUpload size="75" className="text-white" />}
-                <p className="text-white">{text}</p>
+                {preview ? <img src={preview} alt="" className="w-[150px] h-[150px] object-cover" /> :
+                   srcImage ? <img src={srcImage} alt="" className="w-[150px] h-[150px] object-cover" /> : <MdOutlineCloudUpload size="75" className="text-white" />}
+                {srcImage?.length == 0  || !preview && <p className="text-white">{text}</p>}
                 <Controller
                     render={({field: {onChange, onBlur, value, name, ref}}) => (
-                        <label id='upload' className="btn w-[120px] bg-[#2D68A2] px-6 h-10">{preview ? "تغییر فایل":"انتخاب فایل"}
+                        <label id='upload' className={`btn w-[120px] bg-[#2D68A2] px-6 mt-4 h-10 ${classNames?.classButton}`}>{preview ? "تغییر فایل":"انتخاب فایل"}
                             <input hidden id='upload' className="w-full h-full" type='file'
                                    accept="image/png, image/jpeg"
                                    onChange={(e: FormEvent<HTMLInputElement>) => {

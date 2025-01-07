@@ -26,31 +26,30 @@ const DetailsContact = () => {
             </section>
             <hr className="bg-CYAN w-full"/>
             {!isLoading && <section className="inside w-full mt-2 my-2 text-center p-3 bg-currentLine rounded-md">
-                <div className="w-full grid grid-cols-[3fr,9fr] gap-4">
+                <div className="w-full grid grid-cols-[3fr,9fr] sm:grid-cols-[5fr,7fr] gap-4 sm:gap-2 sm:max-h-[200px]">
                     <div className="">
                         <img src={user?.image_path} alt={user?.firstName}
-                             className="border-[1px] border-PURPLE rounded-md h-full"/>
+                             className="border-[1px] border-PURPLE rounded-md sm:h-[210px]"/>
                     </div>
                     <div className="bg-white rounded-md text-center flex flex-col justify-evenly">
-                        <div className="w-full border-b-[1px] last:border-b-0 border-comment py-2 text-base">نام و نام
-                            خانوادگی
+                        <div className="w-full border-b-[1px] last:border-b-0 border-comment py-2 text-base sm:text-sm">نام
                             : <span className="font-bold">{`${user?.firstName} ${user?.lastName}`}</span></div>
-                        <div className="w-full border-b-[1px] last:border-b-0 border-comment py-2 text-base">موبایل
+                        <div className="w-full border-b-[1px] last:border-b-0 border-comment py-2 text-base sm:text-sm">موبایل
                             : <span
                                 className="font-bold">{user?.mobile}</span></div>
-                        <div className="w-full border-b-[1px] last:border-b-0 border-comment py-2 text-base">آدرس ایمیل
+                        <div className="w-full border-b-[1px] last:border-b-0 border-comment py-2 text-base sm:text-sm"> ایمیل
                             : <span
                                 className="font-bold">{user?.email}</span></div>
-                        <div className="w-full border-b-[1px] last:border-b-0 border-comment py-2 text-base">شغل
+                        <div className="w-full border-b-[1px] last:border-b-0 border-comment py-2 text-base sm:text-sm">شغل
                             : <span
                                 className="font-bold">{user?.job}</span></div>
-                        <div className="w-full border-b-[1px] last:border-b-0 border-comment py-2 text-base">گروه
+                        <div className="w-full border-b-[1px] last:border-b-0 border-comment py-2 text-base sm:text-sm">گروه
                             : <span
                                 className="font-bold">{user?.category.name}</span></div>
                     </div>
 
                 </div>
-                <div className="w-full my-2 flex justify-center">
+                <div className="w-full my-2 sm:my-6 flex justify-center">
                     <Link to="/contacts" className="btn bg-PURPLE text-white w-[300px]">برگشت به صفحه ی اصلی</Link>
                 </div>
 

@@ -6,6 +6,7 @@ interface IProps {
 }
 
 const MainLayout: FC<IProps> = ({children}) => {
+
     return (
         <>
             <Header/>

@@ -70,9 +70,9 @@ const AddContacts = () => {
                 <h2 className="font-normal text-center text-GREEN border-b-[1px] border-GREEN py-4">ساخت مخاطب جدید</h2>
             </section>
             <img src={require("../../assets/images/man-taking-note.png")}
-                 className="h-[400px] absolute z-[-1] top-[130px] left-[100px] opacity-50" alt=""/>
+                 className="h-[400px] absolute z-[-1] top-[130px] left-[100px] opacity-50 sm:hidden" alt=""/>
             <section className="mt-5 w-full inside">
-                <div className="w-1/3 ">
+                <div className="w-1/3 sm:w-full">
                     <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-3">
                         <TextInput name="firstName" control={control} errors={errors} placeholder="نام"/>
                         <TextInput name="lastName" control={control} errors={errors} placeholder="نام خانوادگی"/>
@@ -82,9 +82,9 @@ const AddContacts = () => {
                         <SelectInput list={categoryList} name="category_id" control={control} errors={errors}
                                      isLoading={isLoading} placeholder="انتخاب دسته بندی"/>
                         <ImageUploader name="image" control={control} errors={errors}  text="یک تصویر انتخاب کنید" />
-                        <div className="w-full flex justify-center items-center gap-2">
-                            <button type="submit" className="btn bg-PURPLE">ساخت مخاطب</button>
-                            <Link className="btn bg-comment" to="/contacts">انصراف</Link>
+                        <div className="w-full flex justify-center items-center gap-2 mb-10">
+                            <button type="submit" className="btn bg-PURPLE sm:w-full">ساخت مخاطب</button>
+                            <Link className="btn bg-comment sm:w-full" to="/contacts">انصراف</Link>
                         </div>
                     </form>
                 </div>

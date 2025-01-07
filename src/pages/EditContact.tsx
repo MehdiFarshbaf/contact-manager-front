@@ -1,14 +1,20 @@
+import {useEffect, useState} from "react";
 import {Link, useNavigate, useParams} from "react-router-dom";
-import { useEffect, useState} from "react";
-import {useEditUserMutation, useGetUserQuery} from "../data/services/User";
 import * as Yup from "yup";
-import { useForm} from "react-hook-form";
+import {toast} from "react-toastify";
+import {useForm} from "react-hook-form";
+
+
 import {yupResolver} from "@hookform/resolvers/yup";
 import {useGetCategoriesQuery} from "../data/services/Category";
+import {useEditUserMutation, useGetUserQuery} from "../data/services/User";
+
+// types
 import {OptionSelect} from "../interface/publicInterface";
+
+// inputs
 import TextInput from "../components/inputs/TextInput";
 import SelectInput from "../components/inputs/SelectInput";
-import {toast} from "react-toastify";
 import ImageUploader from "../components/inputs/ImageUploader";
 
 const EditContact = () => {
@@ -78,7 +84,7 @@ const EditContact = () => {
             </section>
             <hr className="bg-CYAN w-full"/>
             {!isLoading && <section className="inside w-full mt-2 my-2 text-center p-3 bg-currentLine rounded-md">
-                <form onSubmit={handleSubmit(onSubmit)} className="w-full grid grid-cols-[9fr,3fr] gap-4">
+                <form onSubmit={handleSubmit(onSubmit)} className="w-full grid grid-cols-[9fr,3fr] gap-4 sm:flex sm:flex-col">
                     <div className=" flex flex-col justify-center gap-2">
                         <TextInput name="firstName" control={control} errors={errors} placeholder="نام"/>
                         <TextInput name="lastName" control={control} errors={errors} placeholder="نام خانوادگی"/>
@@ -89,12 +95,14 @@ const EditContact = () => {
                                      isLoading={isLoadingCategory} placeholder="انتخاب دسته بندی"/>
                     </div>
                     <div className="">
-                        <ImageUploader name="image" control={control} errors={errors} srcImage={data?.data?.image_path} />
+                        <ImageUploader name="image" control={control} errors={errors}
+                                       classNames={{classContainer:"h-full",classButton:"mt-2"}}
+                                       srcImage={data?.data?.image_path}/>
                     </div>
                 </form>
                 <div className="w-full flex justify-center items-center gap-2 mt-4">
-                    <button onClick={() => onSubmit(getValues())} className="btn bg-PURPLE">ویرایش مخاطب</button>
-                    <Link className="btn bg-comment" to="/contacts">انصراف</Link>
+                    <button onClick={() => onSubmit(getValues())} className="btn bg-PURPLE sm:w-full">ویرایش مخاطب</button>
+                    <Link className="btn bg-comment sm:w-full" to="/contacts">انصراف</Link>
                 </div>
             </section>}
         </main>

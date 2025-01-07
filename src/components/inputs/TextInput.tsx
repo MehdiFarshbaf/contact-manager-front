@@ -15,7 +15,7 @@ interface IProps extends FormComponentProps {
     }
 }
 
-const TextInput: FC<IProps> = ({name, control, errors,placeholder, label,type="text", classNames,}) => {
+const TextInput: FC<IProps> = ({name="", control, errors,placeholder = "", label="",type="text", classNames,}) => {
     return (
         <div className={`${classNames?.classContainer}`}>
             <Controller

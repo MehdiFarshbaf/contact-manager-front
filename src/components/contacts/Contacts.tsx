@@ -17,7 +17,7 @@ const Contacts = () => {
     }, [data]);
 
     return (
-        <main className="w-full flex flex-col justify-center items-center">
+        <main className="w-full flex flex-col justify-center items-center mb-10">
             <section className="inside w-full mt-2">
                 <Link to="/add-contact"
                     className="mb-2 rounded-md bg-PINK px-[6px] py-3 flex items-center justify-center gap-2 w-[191px]">ساخت

@@ -1,6 +1,8 @@
 import {FC, useEffect} from "react"
 import {Link} from "react-router-dom";
 import Swal from "sweetalert2"
+
+import {useDeleteUserMutation} from "../../data/services/User";
 // types
 import {UserType} from "../../interface/EntityUser"
 
@@ -8,7 +10,8 @@ import {UserType} from "../../interface/EntityUser"
 import {FaTrash} from "react-icons/fa6";
 import {FaPen} from "react-icons/fa";
 import {FaEye} from "react-icons/fa";
-import {useDeleteUserMutation} from "../../data/services/User";
+
+// utils
 import {handleShowError} from "../../utils/functions";
 
 interface IProps {
@@ -18,9 +21,7 @@ interface IProps {
 
 const Contact: FC<IProps> = ({user}) => {
 
-
     const [deleteUser, resultDeleteUser] = useDeleteUserMutation()
-
     const handleDeleteUser = async () => {
         Swal.fire({
             title: "حذف کاربر!",
@@ -39,44 +40,58 @@ const Contact: FC<IProps> = ({user}) => {
                 } catch (err) {
                     handleShowError(err)
                 }
-                // Swal.fire({
-                //     title: "Deleted!",
-                //     text: "Your file has been deleted.",
-                //     icon: "success"
-                // });
             }
         });
     }
 
     useEffect(() => {
-        if(resultDeleteUser?.data?.success === true){
+        if (resultDeleteUser?.data?.success === true) {
             Swal.fire({
                 title: "حذف شد!",
                 text: resultDeleteUser.data.message,
-                confirmButtonText:"متوجه شدم",
+                confirmButtonText: "متوجه شدم",
                 icon: "success"
             });
         }
     }, [resultDeleteUser]);
 
     return (
-        <div className="w-full bg-currentLine p-4 rounded-md grid grid-cols-[4fr,7fr,1fr] gap-4 justify-between">
+        <div
+            className="w-full bg-currentLine p-4 rounded-md grid grid-cols-[4fr,7fr,1fr] sm:grid-cols-[4fr,8fr] gap-4 sm:gap-2 sm:p-2 justify-between">
             <div className="">
                 <img src={user.image_path} alt={user.firstName}
-                     className="w-full object-fit h-[150px] border-PURPLE border-[1px] rounded-md"/>
+                     className="w-full object-fill sm:h-full sm:object-fill h-[150px] border-PURPLE border-[1px] rounded-md"/>
             </div>
-            <div className="bg-white rounded-md text-center flex flex-col justify-evenly">
-                <div className="w-full border-b-[1px] last:border-b-0 border-comment py-2 text-base">نام و نام خانوادگی
-                    : <span className="font-bold">{`${user.firstName} ${user.lastName}`}</span></div>
-                <div className="w-full border-b-[1px] last:border-b-0 border-comment py-2 text-base">موبایل : <span
-                    className="font-bold">{user.mobile}</span></div>
-                <div className="w-full border-b-[1px] last:border-b-0 border-comment py-2 text-base">آدرس ایمیل : <span
-                    className="font-bold">{user.email}</span></div>
+            {/*info*/}
+            <div className="w-full flex flex-col gap-2">
+                <div className="bg-white rounded-md text-center flex flex-col justify-evenly h-full">
+                    <div className="w-full border-b-[1px] last:border-b-0 border-comment py-2 text-base">نام و نام
+                        خانوادگی
+                        : <span className="font-bold">{`${user.firstName} ${user.lastName}`}</span></div>
+                    <div className="w-full border-b-[1px] last:border-b-0 border-comment py-2 text-base">موبایل : <span
+                        className="font-bold">{user.mobile}</span></div>
+                    <div className="w-full border-b-[1px] last:border-b-0 border-comment py-2 text-base">آدرس ایمیل
+                        : <span
+                            className="font-bold">{user.email}</span></div>
+                </div>
+                <div className="hidden sm:flex flex-row justify-evenly items-center ">
+                    <Link to={`/contacts/${user._id}`}
+                          className="h-10 w-10 rounded-md flex justify-center items-center cursor-pointer bg-ORANGE"><FaEye/></Link>
+                    <Link to={`/contacts/edit/${user._id}`}
+                          className="h-10 w-10 rounded-md flex justify-center items-center cursor-pointer bg-CYAN"><FaPen/>
+                    </Link>
+                    <div className="h-10 w-10 rounded-md flex justify-center items-center cursor-pointer bg-RED"
+                         onClick={() => handleDeleteUser()}><FaTrash/></div>
+
+                </div>
             </div>
-            <div className="flex flex-col justify-evenly items-center">
+
+            {/*actions  hidden in mobile mode  */}
+            <div className="flex flex-col justify-evenly items-center sm:hidden ">
                 <Link to={`/contacts/${user._id}`}
                       className="h-10 w-10 rounded-md flex justify-center items-center cursor-pointer bg-ORANGE"><FaEye/></Link>
-                <Link to={`/contacts/edit/${user._id}`} className="h-10 w-10 rounded-md flex justify-center items-center cursor-pointer bg-CYAN"><FaPen/>
+                <Link to={`/contacts/edit/${user._id}`}
+                      className="h-10 w-10 rounded-md flex justify-center items-center cursor-pointer bg-CYAN"><FaPen/>
                 </Link>
                 <div className="h-10 w-10 rounded-md flex justify-center items-center cursor-pointer bg-RED"
                      onClick={() => handleDeleteUser()}><FaTrash/></div>
