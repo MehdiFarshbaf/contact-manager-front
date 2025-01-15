@@ -29,12 +29,12 @@ const AddContacts = () => {
     const navigate = useNavigate()
 
     const schema = Yup.object().shape({
-        firstName: Yup.string().required(("نام الزامی است.")).min(3),
-        lastName: Yup.string().required(("نام خانوادگی الزامی است.")),
-        mobile: Yup.string().required(("موبایل الزامی است.")),
-        job: Yup.string().required(("شغل الزامی است.")),
-        category_id: Yup.string().required(("انتخاب دسته بندی الزامی است.")),
-        email: Yup.string().email("ایمیل وارد شده معتبر نمی باشد.").required(("ایمیل الزامی است.")),
+        firstName: Yup.string().required("نام الزامی است.").min(3,"نام حداقل باید سه کاراکتر باشد."),
+        lastName: Yup.string().required("نام خانوادگی الزامی است."),
+        mobile: Yup.string().required('موبایل الزامی می باشد.').matches(/^(\+98?)?{?(0?9[0-9]{9,9}}?)$/, 'شماره موبایل معتبر نیست').length(11, 'طول شماره تلفن باید 11 کاراکتر باشد.'),
+        job: Yup.string().required("شغل الزامی است."),
+        category_id: Yup.string().required("انتخاب دسته بندی الزامی است."),
+        email: Yup.string().email("ایمیل وارد شده معتبر نمی باشد.").required("ایمیل الزامی است."),
     });
     const {handleSubmit, control, formState: {errors}, getValues, setValue, reset} = useForm<any>({
         resolver: yupResolver(schema),

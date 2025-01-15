@@ -43,7 +43,7 @@ const SelectInput: FC<IProps> = ({ classNames, name, list, control, isLoading, p
                 name={name}
                 control={control}
             />
-            {errors[name] && <p className={`text-red-700 ${classNames?.classError}`}>{errors.firstName?.message}</p>}
+            {errors[name] && <p className={`text-red-700 ${classNames?.classError}`}>{errors[name]?.message}</p>}
         </div>
     )
 }

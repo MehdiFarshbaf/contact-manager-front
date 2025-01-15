@@ -32,7 +32,7 @@ const TextInput: FC<IProps> = ({name="", control, errors,placeholder = "", label
                 name={name}
                 control={control}
             />
-            {errors[name] && <p className={`text-red-700 ${classNames?.classError}`}>{errors.firstName?.message}</p>}
+            {errors[name] && <p className={`text-red-700 ${classNames?.classError}`}>{errors[name]?.message}</p>}
         </div>
     )
 }
